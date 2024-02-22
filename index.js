@@ -31,7 +31,9 @@ async function run() {
 
         const productCollection = client.db("automotiveDB").collection("product");
 
-        const userCollection = client.db("automotiveDB").collection("user")
+
+
+
 
 
         app.get('/products', async (req, res) => {
@@ -41,62 +43,7 @@ async function run() {
 
         })
 
-        app.get('/products/:id', async (req, res) => {
-            const id = req.params.id
-            const query = { _id: new ObjectId(id) }
-            const result = await productCollection.findOne(query)
-            res.send(result)
-        })
 
-        app.post('/products', async (req, res) => {
-            const newProduct = req.body;
-            const result = await productCollection.insertOne(newProduct)
-            res.send(result)
-        })
-
-
-        app.put('/products/:id', async (req, res) => {
-            const id = req.params.id
-            const filter = { _id: new ObjectId(id) }
-            const options = { upsert: true };
-            const product = req.body
-            const updateProduct = {
-                $set: {
-                    product_name: product.product_name,
-                    brand_name: product.brand_name,
-                    type: product.type,
-                    price: product.price,
-                    rating: product.rating,
-                    photo: product.photo,
-
-                }
-            }
-
-            const result = await productCollection.updateOne(filter, updateProduct, options)
-            res.send(result)
-        })
-
-        // user related apis 
-
-        app.get('/users', async (req, res) => {
-            const cursor = userCollection.find();
-            const users = await cursor.toArray();
-            res.send(users)
-        })
-
-        app.post('/users', async (req, res) => {
-            const addProduct = req.body;
-            const result = await userCollection.insertOne(addProduct)
-            res.send(result)
-
-        })
-
-        app.delete('/users/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: new ObjectId(id) };
-            const result = await userCollection.deleteOne(query);
-            res.send(result)
-        })
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
