@@ -31,9 +31,7 @@ async function run() {
 
         const productCollection = client.db("automotiveDB").collection("product");
 
-
-
-
+        const userCollection = client.db("automotiveDB").collection("user")
 
 
         app.get('/products', async (req, res) => {
@@ -41,6 +39,14 @@ async function run() {
             const result = await cursor.toArray()
             res.send(result)
 
+        })
+
+
+        app.get('/products/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await productCollection.findOne(query)
+            res.send(result)
         })
 
 
