@@ -54,6 +54,7 @@ async function run() {
             res.send(result)
         })
 
+
         app.put('/products/:id', async (req, res) => {
             const id = req.params.id
             const filter = { _id: new ObjectId(id) }
@@ -75,7 +76,27 @@ async function run() {
             res.send(result)
         })
 
+        // user related apis 
 
+        app.get('/users', async (req, res) => {
+            const cursor = userCollection.find();
+            const users = await cursor.toArray();
+            res.send(users)
+        })
+
+        app.post('/users', async (req, res) => {
+            const addProduct = req.body;
+            const result = await userCollection.insertOne(addProduct)
+            res.send(result)
+
+        })
+
+        app.delete('/users/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await userCollection.deleteOne(query);
+            res.send(result)
+        })
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
